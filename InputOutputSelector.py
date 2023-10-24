@@ -11,8 +11,8 @@ class InputOutputSelector:
         self.__unknown_devices = {}
         for ii in range(self.__py_audio.get_device_count()):
             device_info = self.__py_audio.get_device_info_by_index(ii)
-            print(device_info)
-        #     device_name = device_info.get('name')
+            device_name = device_info.get('name')
+            print(device_name)
         #     if 'Kopf' in device_name or 'mikro' in device_name:
         #         self.__microphones[ii] = device_name
         #     elif 'Lautsprecher' in device_name or 'Speaker' in device_name:
