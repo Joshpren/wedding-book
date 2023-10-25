@@ -31,7 +31,7 @@ class WeddingBookMachine(StateMachine):
         self.send("record")
 
     def on_record(self):
-        Recorder.record()
+        Recorder.Recoder().run()
         self.send("save_recording")
 
     def on_save_recording(self):
