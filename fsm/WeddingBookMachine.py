@@ -1,6 +1,7 @@
 from statemachine import StateMachine, State
 from time import sleep
-from fsm import Recorder
+from core import AudioPlayer, AudioRecorder
+import threading
 
 class WeddingBookMachine(StateMachine):
 
@@ -25,17 +26,28 @@ class WeddingBookMachine(StateMachine):
         self.send("initialize")
 
     def on_initialize(self):
-        for i in range(10):
+        for i in range(5):
             print("Grüne Led blinkt")
             sleep(0.5)
+        # Usage example for pyaudios
+        AudioPlayer.AudioPlayer("./../resources/announcement/Aufzeichnung.wav").play().close()
+
         self.send("record")
 
     def on_record(self):
-        Recorder.Recoder().run()
-        self.send("save_recording")
+        recorder = AudioRecorder.Recoder()
+        record_thread = threading.Thread(target=recorder.record, args=())
+        record_thread.start()
+        stop_command = input("Type c to stop!")
+        while not stop_command == 'c':
+            stop_command = input("Type c to stop!")
+        recorder.stop_recording()
+        record_thread.join()
+        self.send("save_recording", recorder)
 
-    def on_save_recording(self):
+    def on_save_recording(self, recorder):
         print("Save")
+        recorder.save().close()
         self.send("finish")
 
 sm = WeddingBookMachine()
