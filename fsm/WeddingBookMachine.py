@@ -35,7 +35,7 @@ class WeddingBookMachine(StateMachine):
         self.send("record")
 
     def on_record(self):
-        recorder = AudioRecorder.Recoder()
+        recorder = AudioRecorder.AudioRecoder()
         record_thread = threading.Thread(target=recorder.record, args=())
         record_thread.start()
         stop_command = input("Type c to stop!")
