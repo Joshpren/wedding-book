@@ -11,7 +11,7 @@ class AudioRecoder:
     chans = 1 # 1 channel
     samp_rate = 44100 # 44.1kHz sampling rate
     chunk = 4096 # 2^12 samples for buffer
-    max_audio_length = 10 # max seconds to record
+    max_audio_length = 20 # max seconds to record
     dev_index = 2 # device index found by p.get_device_info_by_index(ii)
 
 
@@ -38,7 +38,7 @@ class AudioRecoder:
             if int(time.time() - start_time) >= self.max_audio_length:
                 # if duration reaches max audio length, then stop recording
                 self.__is_picked_up.clear()
-                print("Recording has been stopped after exceeding the maximum length!")
+                print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
 
             data = self.__stream.read(self.chunk)
             self.__frames.append(data)
