@@ -4,6 +4,16 @@ import threading
 
 class WeddingBook:
 
+    pin_number = 17
+
+    def __init__(self):
+        # Setze den Pin-Modus auf GPIO.BCM
+        GPIO.setmode(GPIO.BCM)
+
+        # Setze den Pin als Eingang
+        GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
     def run_by_keyboard_input(self):
         wbm = WeddingBookMachine.WeddingBookMachine()
 
@@ -19,12 +29,12 @@ class WeddingBook:
         wbm = WeddingBookMachine.WeddingBookMachine()
         is_picked_up = False
         while True:
-            if GPIO.input(pin_nummer) == GPIO.LOW and not is_picked_up:
+            if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
                 # Circuit is closed, phone has been picked up
                 is_picked_up = True
                 wbm_thread = threading.Thread(target=wbm.on_pick_up, args=())
                 wbm_thread.start()
-            elif not GPIO.input(pin_nummer) == GPIO.LOW and is_picked_up:
+            elif not GPIO.input(self.pin_number) == GPIO.LOW and is_picked_up:
                 # Circuit is interrupted
                 wbm.on_hang_up()
                 is_picked_up = False
@@ -34,14 +44,7 @@ class WeddingBook:
 
 
 
-# Setze den Pin-Modus auf GPIO.BCM
-GPIO.setmode(GPIO.BCM)
 
-# Definiere den Pin, den du überwachen möchtest
-pin_number = 17
-
-# Setze den Pin als Eingang
-GPIO.setup(pin_number, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 try:
