@@ -23,17 +23,15 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
-        print("Play announcement")
         AudioPlayer.AudioPlayer(self.is_picked_up).play().close()
 
     def on_record(self):
         # Record guest-book entry
-        print("Record guest-book entry")
         self.recorder.record()
 
 
     def on_save_recording(self):
-        print("Save recording")
+        # Save REcording
         self.recorder.save().close()
 
 
@@ -42,17 +40,10 @@ class WeddingBookMachine(StateMachine):
         if not self.current_state == WeddingBookMachine.idling:
             return
         self.record()
-        # if not self.recorder.is_running():
-        #     print("Stopped")
-        #     self.recorder.stop()
-        #     self.save_recording()
-        # record_task = asyncio.create_task(self.record())
 
     def on_hang_up(self):
         print("Hang up")
-        print(self.is_picked_up.is_set())
         self.is_picked_up.clear()
-        print(self.is_picked_up.is_set())
         self.save_recording()
         self.complete()
 

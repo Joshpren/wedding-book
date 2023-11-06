@@ -50,11 +50,12 @@ class AudioRecoder:
 
     def save(self):
         """ Save the file """
-        print("Save recording")
         if not self.__frames and self.__duration < 5:
             # Recording is too short and wont be saved
+            print("Recording is to short to be saved! It hast to be at least 5 seconds")
             return self
 
+        print("Save recording")
         if not os.path.exists(self.__storage_directory):
             os.makedirs(self.__storage_directory)
         wav_output_filename = f'{self.__storage_directory}/{datetime.now()}.wav' # name of .wav file

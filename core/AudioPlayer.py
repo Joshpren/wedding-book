@@ -19,6 +19,7 @@ class AudioPlayer:
 
     def play(self):
         """ Play entire file """
+        print("Play announcement")
         data = self.__wf.readframes(self.chunk)
         while data != b'' and self.__is_picked_up.is_set():
             self.__stream.write(data)
