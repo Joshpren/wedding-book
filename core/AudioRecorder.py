@@ -50,7 +50,7 @@ class AudioRecoder:
 
     def save(self):
         """ Save the file """
-        if not self.__frames and self.__duration < 5:
+        if not self.__frames or self.__duration < 5:
             # Recording is too short and wont be saved
             print("Recording is to short to be saved! It hast to be at least 5 seconds")
             return self
