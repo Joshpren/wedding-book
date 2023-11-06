@@ -1,7 +1,6 @@
 from statemachine import StateMachine, State
 from core import AudioPlayer, AudioRecorder
 import threading
-import asyncio
 
 class WeddingBookMachine(StateMachine):
 

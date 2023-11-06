@@ -1,6 +1,7 @@
 from fsm import WeddingBookMachine
 import RPi.GPIO as GPIO
 import threading
+import time
 
 class WeddingBook:
 
@@ -32,14 +33,17 @@ class WeddingBook:
             if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
                 # Circuit is closed, phone has been picked up
                 is_picked_up = True
+                time.sleep(1)
                 wbm_thread = threading.Thread(target=wbm.on_pick_up, args=())
                 wbm_thread.start()
             elif not GPIO.input(self.pin_number) == GPIO.LOW and is_picked_up:
                 # Circuit is interrupted
                 wbm.on_hang_up()
+                wbm_thread.join()
                 is_picked_up = False
             else:
                 # Do nothing
+                time.sleep(0.5)
                 pass
 
 
