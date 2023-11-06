@@ -1,10 +1,11 @@
 import pyaudio
 import wave
+import sys
 
 class AudioPlayer:
     chunk = 1024
 
-    def __init__(self, file):
+    def __init__(self, is_picked_up, file="resources/announcement/Aufzeichnung.wav"):
         """ Init audio stream """
         self.__wf = wave.open(file, 'rb')
         self.__audio = pyaudio.PyAudio()
@@ -14,15 +15,16 @@ class AudioPlayer:
             rate = self.__wf.getframerate(),
             output = True
         )
+        self.__is_picked_up = is_picked_up
 
     def play(self):
         """ Play entire file """
         data = self.__wf.readframes(self.chunk)
-        while data != b'':
+        while data != b'' and self.__is_picked_up.is_set():
             self.__stream.write(data)
             data = self.__wf.readframes(self.chunk)
-
         return self
+
 
     def close(self):
         """ Graceful shutdown """

@@ -1,69 +1,58 @@
 from statemachine import StateMachine, State
-from time import sleep
 from core import AudioPlayer, AudioRecorder
 import threading
+import asyncio
 
 class WeddingBookMachine(StateMachine):
 
-    recorder = AudioRecorder.AudioRecoder()
+    is_picked_up = threading.Event()
+    recorder = AudioRecorder.AudioRecoder(is_picked_up)
+
+
     idling = State("Idling", initial=True)
-    recording = State("Recording", rec=recorder)
-    saving = State("Saving", rec=recorder)
+    recording = State("Recording")
+    saving = State("Saving")
     canceling = State("Canceling")
 
     idle = idling.to.itself()
     record = idling.to(recording)
-    cancel = canceling.from_(record, idling)
+    cancel = canceling.from_(recording, idling)
     save_recording = recording.to(saving)
-    finish = saving.to(idling)
-
-
-    def on_idle(self):
-        i = input("Sag was")
-        while not i  == 's':
-            i = input("Sag was")
-        self.send("record")
+    complete = saving.to(idling)
 
 
     def before_record(self):
-        # for i in range(2):
-        #     print("Grüne Led blinkt")
-        #     sleep(0.5)
         # Play announcement
-        AudioPlayer.AudioPlayer("resources/announcement/Aufzeichnung.wav").play().close()
+        print("Play announcement")
+        AudioPlayer.AudioPlayer(self.is_picked_up).play().close()
 
     def on_record(self):
+        # Record guest-book entry
+        print("Record guest-book entry")
+        self.recorder.record()
 
-        self.rec.record()
-        self.send("save_recording")
-        # stop_command = input("Type c to stop!")
-        # while not stop_command == 'c':
-        #     stop_command = input("Type c to stop!")
-        # recorder.stop_recording()
 
     def on_save_recording(self):
-        print("Save")
-        self.rec.save().close()
-        self.send("finish")
+        print("Save recording")
+        self.recorder.save().close()
 
 
     def on_pick_up(self):
+        self.is_picked_up.set()
         if not self.current_state == WeddingBookMachine.idling:
             return
-        self.send("record")
+        self.record()
+        # if not self.recorder.is_running():
+        #     print("Stopped")
+        #     self.recorder.stop()
+        #     self.save_recording()
+        # record_task = asyncio.create_task(self.record())
 
     def on_hang_up(self):
-        if self.current_state == WeddingBookMachine.idling:
-            return
-        elif self.current_state == WeddingBookMachine.recording:
-            self.recorder.stop_recording()
-
-
-
-# sm = WeddingBookMachine()
-# # record_thread = threading.Thread(target=recorder.record, args=())
-# # record_thread.start()
-# # record_thread.join()
-# while True:
-#     sm.send("idle")
+        print("Hang up")
+        print(self.is_picked_up.is_set())
+        self.is_picked_up.clear()
+        print(self.is_picked_up.is_set())
+        self.save_recording()
+        self.complete()
 
