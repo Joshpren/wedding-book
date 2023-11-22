@@ -12,7 +12,7 @@ class AudioRecoder:
     chans = 1 # 1 channel
     samp_rate = 44100 # 44.1kHz sampling rate
     chunk = 4096 # 2^12 samples for buffer
-    max_audio_length = 20 # max seconds to record
+    max_audio_length = 600 # max seconds to record
     dev_index = InputOutputSelector().load() # device index found by p.get_device_info_by_index(ii)
 
 
