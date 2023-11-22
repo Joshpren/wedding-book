@@ -12,7 +12,7 @@ class InputOutputSelector:
             device_info = py_audio.get_device_info_by_index(ii)
             device_name = device_info.get('name')
             print(f"ID: {ii} - Name: {device_name}")
-        self.__prefered_device = input()
+        self.__prefered_device = int(input())
         return self
 
     def save(self):
