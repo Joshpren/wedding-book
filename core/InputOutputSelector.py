@@ -1,33 +1,36 @@
 import pyaudio
+import json
 
 class InputOutputSelector:
 
-    def __init__(self, prefered_microphone_id=None, prefered_speaker_id=None):
-        self.__microphone = None
-        self.__speaker = None
+    def __init__(self):
         self.__py_audio = pyaudio.PyAudio()
-        self.__microphones = {}
-        self.__speakers = {}
-        self.__unknown_devices = {}
+        self.__prefered_device = None
+
+    def select_device(self):
         for ii in range(self.__py_audio.get_device_count()):
             device_info = self.__py_audio.get_device_info_by_index(ii)
             device_name = device_info.get('name')
             print(f"ID: {ii} - Name: {device_name}")
-        #     if 'Kopf' in device_name or 'mikro' in device_name:
-        #         self.__microphones[ii] = device_name
-        #     elif 'Lautsprecher' in device_name or 'Speaker' in device_name:
-        #         self.__speakers[ii] = device_name
-        #     else:
-        #         self.__unknown_devices[ii] = device_name
-        #     # print(p.get_device_info_by_index(ii).get('name'))
-        # if prefered_microphone_id:
-        #     self.__microphone = self.__microphones[prefered_microphone_id]
-        # if prefered_speaker_id:
-        #     self.__speaker = self.__speakers[prefered_speaker_id]
-        # print(self.__microphones)
-        # print(self.__speakers)
-        # print(self.__unknown_devices)
-        # print(self.__microphone)
-        # print(self.__speaker)
+            self.__prefered_device = input()
+        return self
 
-InputOutputSelector(6, 15)
+    def save(self):
+        dictionary = {
+            "dev_index": self.__prefered_device
+        }
+        # Serializing json
+        json_object = json.dumps(dictionary, indent=1)
+
+        # Writing to sample.json
+        with open("resources/target/config.json", "w") as outfile:
+            outfile.write(json_object)
+
+    def load(self):
+        with open('resources/target/config.json', 'r') as openfile:
+            json_object = json.load(openfile)
+        return json_object["dev_index"]
+
+
+InputOutputSelector().select_device()
+
