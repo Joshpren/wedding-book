@@ -16,7 +16,7 @@ class WeddingBook:
 
 
     def run_by_keyboard_input(self):
-        wbm = WeddingBookMachine.WeddingBookMachine()
+        wbm = WeddingBookMachine.WeddingBookMachine(dev_index)
 
         while True:
             circuit_closed = input("Record? (y)es/(n)o") == 'y'

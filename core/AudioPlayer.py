@@ -5,7 +5,7 @@ import sys
 class AudioPlayer:
     chunk = 1024
 
-    def __init__(self, is_picked_up, file="resources/announcement/Aufzeichnung.wav"):
+    def __init__(self, is_picked_up, file="resources/announcement/Ansage.wav"):
         """ Init audio stream """
         self.__wf = wave.open(file, 'rb')
         self.__audio = pyaudio.PyAudio()
