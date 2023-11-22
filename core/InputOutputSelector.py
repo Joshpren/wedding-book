@@ -4,15 +4,15 @@ import json
 class InputOutputSelector:
 
     def __init__(self):
-        self.__py_audio = pyaudio.PyAudio()
         self.__prefered_device = None
 
     def select_device(self):
-        for ii in range(self.__py_audio.get_device_count()):
-            device_info = self.__py_audio.get_device_info_by_index(ii)
+        py_audio = pyaudio.PyAudio()
+        for ii in range(py_audio.get_device_count()):
+            device_info = py_audio.get_device_info_by_index(ii)
             device_name = device_info.get('name')
             print(f"ID: {ii} - Name: {device_name}")
-            self.__prefered_device = input()
+        self.__prefered_device = input()
         return self
 
     def save(self):
