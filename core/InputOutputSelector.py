@@ -29,4 +29,4 @@ class InputOutputSelector:
     def load(self):
         with open('resources/target/config.json', 'r') as openfile:
             json_object = json.load(openfile)
-        return json_object["dev_index"]
+        return int(json_object["dev_index"])
