@@ -216,7 +216,7 @@ class WeddingBook:
                 wbm.on_hang_up()
 
     def run_by_circuit_input(self):
-        wbm = WeddingBookMachine.WeddingBookMachine()
+        wbm = WeddingBookMachine()
         is_picked_up = False
         while True:
             if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
