@@ -1,6 +1,5 @@
 import pyaudio
 import wave
-import sys
 
 class AudioPlayer:
     chunk = 1024
