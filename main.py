@@ -1,14 +1,3 @@
-from datetime import datetime
-import json
-import os
-import pyaudio
-from statemachine import StateMachine, State
-import RPi.GPIO as GPIO
-import threading
-import time
-import wave
-
-
 # /etc/init.d/main.py
 ### BEGIN INIT INFO
 # Provides:          main.py
@@ -19,6 +8,16 @@ import wave
 # Short-Description: Start daemon at boot time
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
+
+from datetime import datetime
+import json
+import os
+import pyaudio
+from statemachine import StateMachine, State
+import RPi.GPIO as GPIO
+import threading
+import time
+import wave
 
 class InputOutputSelector:
 
