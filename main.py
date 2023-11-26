@@ -11,6 +11,8 @@ import wave
 
 class InputOutputSelector:
 
+    config_path = 'resources/config/config.json'
+
     def __init__(self):
         self.__prefered_device = None
 
@@ -31,11 +33,11 @@ class InputOutputSelector:
         json_object = json.dumps(dictionary, indent=1)
 
         # Writing to sample.json
-        with open("resources/target/config.json", "w") as outfile:
+        with open(self.config_path, "w") as outfile:
             outfile.write(json_object)
 
     def load(self):
-        with open('resources/target/config.json', 'r') as openfile:
+        with open(self.config_path, 'r') as openfile:
             json_object = json.load(openfile)
         return int(json_object["dev_index"])
 
