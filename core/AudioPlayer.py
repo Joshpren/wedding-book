@@ -1,8 +1,10 @@
 import pyaudio
 import wave
+from core.InputOutputSelector import InputOutputSelector
 
 class AudioPlayer:
     chunk = 1024
+    dev_index = InputOutputSelector().load()
 
     def __init__(self, is_picked_up, file="resources/announcement/Ansage.wav"):
         """ Init audio stream """
@@ -11,6 +13,7 @@ class AudioPlayer:
         self.__stream = self.__audio.open(
             format = self.__audio.get_format_from_width(self.__wf.getsampwidth()),
             channels = self.__wf.getnchannels(),
+            input_device_index=self.dev_index,
             rate = self.__wf.getframerate(),
             output = True
         )
