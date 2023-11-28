@@ -12,7 +12,7 @@ class WeddingBookMachine(StateMachine):
         dev_index = InputOutputSelector().load()
         audio = pyaudio.PyAudio()  # create pyaudio instantiation
         self.recorder = AudioRecorder.AudioRecoder(audio, dev_index, self.is_picked_up)
-        self.player = AudioPlayer(audio, dev_index, self.is_picked_up)
+        self.player = AudioPlayer.AudioPlayer(audio, dev_index, self.is_picked_up)
 
     idling = State("Idling", initial=True)
     recording = State("Recording")
