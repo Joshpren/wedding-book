@@ -1,9 +1,10 @@
 import pyaudio
 import json
+import os
 
 class InputOutputSelector:
 
-    config_path = 'resources/config/config.json'
+    config_path = 'resources/config'
 
     def __init__(self):
         self.__prefered_device = None
@@ -21,11 +22,13 @@ class InputOutputSelector:
         dictionary = {
             "dev_index": self.__prefered_device
         }
+        if not os.path.exists(self.config_path):
+            os.makedirs(self.config_path)
         # Serializing json
         json_object = json.dumps(dictionary, indent=1)
 
         # Writing to sample.json
-        with open(self.config_path, 'w') as outfile:
+        with open(f'{self.config_path}/config.json', 'w') as outfile:
             outfile.write(json_object)
 
     def load(self):

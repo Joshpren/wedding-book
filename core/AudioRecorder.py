@@ -2,7 +2,7 @@ import os
 import wave
 import pyaudio
 import time
-from core.InputOutputSelector import InputOutputSelector
+
 from datetime import datetime
 
 
@@ -13,12 +13,11 @@ class AudioRecoder:
     samp_rate = 44100 # 44.1kHz sampling rate
     chunk = 4096 # 2^12 samples for buffer
     max_audio_length = 600 # max seconds to record
-    dev_index = InputOutputSelector().load() # device index found by p.get_device_info_by_index(ii)
 
-
-    def __init__(self, is_picked_up, storage_directory='resources/target'):
+    def __init__(self, audio, dev_index, is_picked_up, storage_directory='resources/target'):
         self.__storage_directory = storage_directory
-        self.__audio = pyaudio.PyAudio()  # create pyaudio instantiation
+        self.__audio = audio  # create pyaudio instantiation
+        self.__dev_index = dev_index# device index found by p.get_device_info_by_index(ii)
         self.__stream = None
         self.__frames = []
         self.__duration = 0
@@ -31,7 +30,7 @@ class AudioRecoder:
         print("recording")
         # Open audio stream
         self.__stream = self.__audio.open(format=self.form_1, rate=self.samp_rate, channels=self.chans, \
-                                          input_device_index=self.dev_index, input=True, \
+                                          input_device_index=self.__dev_index, input=True, \
                                           frames_per_buffer=self.chunk)
         # Start timer
         start_time = time.time()

@@ -1,36 +1,29 @@
-import pyaudio
 import wave
-from core.InputOutputSelector import InputOutputSelector
 
 class AudioPlayer:
-    chunk = 1024
-    dev_index = InputOutputSelector().load()
 
-    def __init__(self, is_picked_up, file="resources/announcement/Ansage.wav"):
+    chunk = 1024
+
+    def __init__(self, audio, dev_index, is_picked_up):
         """ Init audio stream """
-        self.__wf = wave.open(file, 'rb')
-        self.__audio = pyaudio.PyAudio()
-        self.__stream = self.__audio.open(
-            format = self.__audio.get_format_from_width(self.__wf.getsampwidth()),
-            channels = self.__wf.getnchannels(),
-            input_device_index=self.dev_index,
-            rate = self.__wf.getframerate(),
-            output = True
-        )
+        self.__audio = audio
+        self.__dev_index = dev_index
         self.__is_picked_up = is_picked_up
 
-    def play(self):
+    def play(self, file):
         """ Play entire file """
         print("Play announcement")
+        self.__wf = wave.open(file, 'rb')
         data = self.__wf.readframes(self.chunk)
+        stream = self.__audio.open(
+            format=self.__audio.get_format_from_width(self.__wf.getsampwidth()),
+            channels=self.__wf.getnchannels(),
+            input_device_index=self.__dev_index,
+            rate=self.__wf.getframerate(),
+            output=True
+        )
         while data != b'' and self.__is_picked_up.is_set():
-            self.__stream.write(data)
+            stream.write(data)
             data = self.__wf.readframes(self.chunk)
-        return self
-
-
-    def close(self):
-        """ Graceful shutdown """
-        self.__stream.close()
-        self.__audio.terminate()
+        stream.close()
 

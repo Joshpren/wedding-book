@@ -1,12 +1,18 @@
 from statemachine import StateMachine, State
+import pyaudio
 from core import AudioPlayer, AudioRecorder
+from core.InputOutputSelector import InputOutputSelector
 import threading
 
 class WeddingBookMachine(StateMachine):
 
     is_picked_up = threading.Event()
-    recorder = AudioRecorder.AudioRecoder(is_picked_up)
 
+    def __init__(self):
+        dev_index = InputOutputSelector().load()
+        audio = pyaudio.PyAudio()  # create pyaudio instantiation
+        self.recorder = AudioRecorder.AudioRecoder(audio, dev_index, self.is_picked_up)
+        self.player = AudioPlayer(audio, dev_index, self.is_picked_up)
 
     idling = State("Idling", initial=True)
     recording = State("Recording")
@@ -22,19 +28,19 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
-        AudioPlayer.AudioPlayer(self.is_picked_up).play().close()
+        self.player.play("resources/announcement/Ansage.wav").close()
 
     def on_record(self):
         # Record guest-book entry
         self.recorder.record()
         if self.is_picked_up.is_set():
-            AudioPlayer.AudioPlayer(self.is_picked_up, "resources/announcement/Aufgelegt.wav").play().close()
-            AudioPlayer.AudioPlayer(self.is_picked_up, "resources/announcement/Tote_Leitung.wav").play().close()
+           self.player.play("resources/announcement/Aufgelegt.wav").close()
+           self.player.play("resources/announcement/Tote_Leitung.wav").close()
 
 
     def on_save_recording(self):
         # Save REcording
-        self.recorder.save().close()
+        self.recorder.save()
 
 
     def on_pick_up(self):
