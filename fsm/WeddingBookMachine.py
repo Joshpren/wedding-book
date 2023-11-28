@@ -7,10 +7,10 @@ import threading
 class WeddingBookMachine(StateMachine):
 
     is_picked_up = threading.Event()
-    dev_index = InputOutputSelector().load()
-    audio = pyaudio.PyAudio()  # create pyaudio instantiation
-    recorder = AudioRecorder.AudioRecoder(audio, dev_index, self.is_picked_up)
-    player = AudioPlayer.AudioPlayer(audio, dev_index, self.is_picked_up)
+    __dev_index = InputOutputSelector().load()
+    __audio = pyaudio.PyAudio()  # create pyaudio instantiation
+    recorder = AudioRecorder.AudioRecoder(__audio, __dev_index, is_picked_up)
+    player = AudioPlayer.AudioPlayer(__audio, __dev_index, is_picked_up)
 
     idling = State("Idling", initial=True)
     recording = State("Recording")
