@@ -1,7 +1,5 @@
-import SelectDevice
 from fsm import WeddingBookMachine
 import RPi.GPIO as GPIO
-from core.InputOutputSelector import InputOutputSelector
 import threading
 import time
 
@@ -31,25 +29,23 @@ class WeddingBook:
     def run_by_circuit_input(self):
         wbm = WeddingBookMachine.WeddingBookMachine()
         is_picked_up = False
-        try:
-            while True:
-                if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
-                    # Circuit is closed, phone has been picked up
-                    is_picked_up = True
-                    time.sleep(1)
-                    wbm_thread = threading.Thread(target=wbm.on_pick_up, args=())
-                    wbm_thread.start()
-                elif not GPIO.input(self.pin_number) == GPIO.LOW and is_picked_up:
-                    # Circuit is interrupted
-                    wbm.on_hang_up()
-                    wbm_thread.join()
-                    is_picked_up = False
-                else:
-                    # Do nothing
-                    time.sleep(0.5)
-                    pass
-        except OSError:
-            InputOutputSelector().select_device().save()
+        while True:
+            if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
+                # Circuit is closed, phone has been picked up
+                is_picked_up = True
+                time.sleep(1)
+                wbm_thread = threading.Thread(target=wbm.on_pick_up, args=())
+                wbm_thread.start()
+            elif not GPIO.input(self.pin_number) == GPIO.LOW and is_picked_up:
+                # Circuit is interrupted
+                wbm.on_hang_up()
+                wbm_thread.join()
+                is_picked_up = False
+            else:
+                # Do nothing
+                time.sleep(0.5)
+                pass
+
 
 
 
