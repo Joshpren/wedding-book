@@ -38,7 +38,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_save_recording(self):
         # Save REcording
-        self.recorder.save()
+        self.recorder.save().close()
 
 
     def on_pick_up(self):
