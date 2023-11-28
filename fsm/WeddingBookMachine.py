@@ -5,7 +5,7 @@ from core.InputOutputSelector import InputOutputSelector
 import threading
 import logging
 
-logging.basicConfig(filename="weddingbook.out",
+logging.basicConfig(filename="logging/weddingbook.out",
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
