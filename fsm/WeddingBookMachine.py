@@ -28,14 +28,14 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
-        self.player.play("resources/announcement/Ansage.wav").close()
+        self.player.play("resources/announcement/Ansage.wav")
 
     def on_record(self):
         # Record guest-book entry
         self.recorder.record()
         if self.is_picked_up.is_set():
-           self.player.play("resources/announcement/Aufgelegt.wav").close()
-           self.player.play("resources/announcement/Tote_Leitung.wav").close()
+           self.player.play("resources/announcement/Aufgelegt.wav")
+           self.player.play("resources/announcement/Tote_Leitung.wav")
 
 
     def on_save_recording(self):
