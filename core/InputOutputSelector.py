@@ -32,6 +32,6 @@ class InputOutputSelector:
             outfile.write(json_object)
 
     def load(self):
-        with open(self.config_path, 'r') as openfile:
+        with open(f'{self.config_path}/config.json', 'r') as openfile:
             json_object = json.load(openfile)
         return int(json_object["dev_index"])
