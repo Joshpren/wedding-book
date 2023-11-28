@@ -3,6 +3,17 @@ import pyaudio
 from core import AudioPlayer, AudioRecorder
 from core.InputOutputSelector import InputOutputSelector
 import threading
+import logging
+
+logging.basicConfig(filename="weddingbook.out",
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
+
+logging.info("Running Urban Planning")
+
+logger = logging.getLogger('urbanGUI')
 
 class WeddingBookMachine(StateMachine):
 
@@ -26,18 +37,25 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
+        logging.debug("Play announcement -Ansage.wav-")
         self.player.play("resources/announcement/Ansage.wav")
 
     def on_record(self):
         # Record guest-book entry
-        self.recorder.record()
-        if self.is_picked_up.is_set():
-           self.player.play("resources/announcement/Aufgelegt.wav")
-           self.player.play("resources/announcement/Tote_Leitung.wav")
+        try:
+            self.recorder.record()
+            if self.is_picked_up.is_set():
+               logging.debug("Play announcement -Aufgelegt.wav-")
+               self.player.play("resources/announcement/Aufgelegt.wav")
+               logging.debug("Play announcement -Tote_Leitung.wav-")
+               self.player.play("resources/announcement/Tote_Leitung.wav")
+        except:
+            logging.exception('Got exception on main handler')
 
 
     def on_save_recording(self):
-        # Save REcording
+        # Save Recording
+        logging.debug("Save Recording")
         self.recorder.save().close()
 
 
@@ -52,6 +70,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_hang_up(self):
         print("Hang up")
+        logging.debug("Hang up")
         self.is_picked_up.clear()
         self.save_recording()
         self.complete()
