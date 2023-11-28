@@ -45,10 +45,9 @@ class WeddingBookMachine(StateMachine):
         self.is_picked_up.set()
         if not self.current_state == WeddingBookMachine.idling:
             return
-        try:
-            self.record()
-        except OSError:
-            InputOutputSelector().select_device().save()
+
+        self.record()
+
 
 
     def on_hang_up(self):
