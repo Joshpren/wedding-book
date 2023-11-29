@@ -5,7 +5,7 @@ class AudioPlayer:
 
     chunk = 1024
 
-    def __init__(self, audio, dev_index, is_picked_up):
+    def __init__(self, dev_index, is_picked_up):
         """ Init audio stream """
         self.__dev_index = dev_index
         self.__is_picked_up = is_picked_up

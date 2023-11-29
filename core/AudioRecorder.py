@@ -14,7 +14,7 @@ class AudioRecoder:
     chunk = 4096 # 2^12 samples for buffer
     max_audio_length = 600 # max seconds to record
 
-    def __init__(self, audio, dev_index, is_picked_up, storage_directory='resources/target'):
+    def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
         self.__storage_directory = storage_directory
         self.__audio = pyaudio.PyAudio()  # create pyaudio instantiation
         self.__dev_index = dev_index# device index found by p.get_device_info_by_index(ii)
