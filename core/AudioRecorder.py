@@ -38,7 +38,7 @@ class AudioRecoder:
                 # if duration reaches max audio length, then stop recording
                 print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
                 self.__duration = time.time() - start_time
-                return
+                break
 
             data = stream.read(self.chunk)
             self.__frames.append(data)
