@@ -12,7 +12,7 @@ class AudioRecoder:
     chans = 1 # 1 channel
     samp_rate = 44100 # 44.1kHz sampling rate
     chunk = 4096 # 2^12 samples for buffer
-    max_audio_length = 600 # max seconds to record
+    max_audio_length = 300 # max seconds to record
 
     def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
         self.__storage_directory = storage_directory
