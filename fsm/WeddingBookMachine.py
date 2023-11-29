@@ -1,11 +1,10 @@
 from statemachine import StateMachine, State
-import pyaudio
 from core import AudioPlayer, AudioRecorder
 from core.InputOutputSelector import InputOutputSelector
 import threading
 import logging
 
-logging.basicConfig(filename="logging/weddingbook.out",
+logging.basicConfig(filename="logging/ weddingbook.out",
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
@@ -19,9 +18,8 @@ class WeddingBookMachine(StateMachine):
 
     is_picked_up = threading.Event()
     __dev_index = InputOutputSelector().load()
-    __audio = pyaudio.PyAudio()  # create pyaudio instantiation
-    recorder = AudioRecorder.AudioRecoder(__audio, __dev_index, is_picked_up)
-    player = AudioPlayer.AudioPlayer(__audio, __dev_index, is_picked_up)
+    recorder = AudioRecorder.AudioRecoder(__dev_index, is_picked_up)
+    player = AudioPlayer.AudioPlayer(__dev_index, is_picked_up)
 
     idling = State("Idling", initial=True)
     recording = State("Recording")
