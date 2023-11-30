@@ -54,7 +54,7 @@ class WeddingBook:
 
 def setup_logging():
     log_file = "logging/wedding-book.log"
-    if not os.path.exists(log_file):
+    if not os.path.exists("logging"):
         os.makedirs("logging")
     logging.basicConfig(filename='', level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
 
