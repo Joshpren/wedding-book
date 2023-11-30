@@ -2,6 +2,7 @@ from fsm import WeddingBookMachine
 import RPi.GPIO as GPIO
 import threading
 import time
+import os
 import logging
 
 
@@ -52,7 +53,10 @@ class WeddingBook:
 
 
 def setup_logging():
-    logging.basicConfig(filename='logging/wedding-book.log', level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
+    log_file = "logging/wedding-book.log"
+    if not os.path.exists(log_file):
+        os.makedirs("logging")
+    logging.basicConfig(filename='', level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
 
 try:
     setup_logging()
