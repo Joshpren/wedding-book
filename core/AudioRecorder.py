@@ -2,9 +2,14 @@ import os
 import wave
 import pyaudio
 import time
-
+import logging
 from datetime import datetime
 
+logging.basicConfig(filename="logging/weddingbook.out",
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
 
 class AudioRecoder:
 
@@ -27,26 +32,30 @@ class AudioRecoder:
         if not self.__is_picked_up:
             return
         print("recording")
-        # Open audio stream
-        stream = self.__audio.open(format=self.form_1, rate=self.samp_rate, channels=self.chans, \
-                                          input_device_index=self.__dev_index, input=True, \
-                                          frames_per_buffer=self.chunk)
-        # Start timer
-        start_time = time.time()
-        while self.__is_picked_up.is_set():
-            if int(time.time() - start_time) >= self.max_audio_length:
-                # if duration reaches max audio length, then stop recording
-                print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
-                self.__duration = time.time() - start_time
-                break
+        try:
+            # Open audio stream
+            stream = self.__audio.open(format=self.form_1, rate=self.samp_rate, channels=self.chans, \
+                                              input_device_index=self.__dev_index, input=True, \
+                                              frames_per_buffer=self.chunk)
+            # Start timer
+            start_time = time.time()
+            while self.__is_picked_up.is_set():
+                if int(time.time() - start_time) >= self.max_audio_length:
+                    # if duration reaches max audio length, then stop recording
+                    print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
+                    self.__duration = time.time() - start_time
+                    break
 
-            data = stream.read(self.chunk)
-            self.__frames.append(data)
+                data = stream.read(self.chunk)
+                self.__frames.append(data)
 
-        self.__duration = time.time() - start_time
-        # Recording has been stopped -> stop stream
-        stream.stop_stream()
-        stream.close()
+            self.__duration = time.time() - start_time
+        except:
+            logging.exception('Got exception on main handler')
+        finally:
+            # Recording has been stopped -> stop stream
+            stream.stop_stream()
+            stream.close()
         return self
 
     def save(self):
@@ -57,16 +66,21 @@ class AudioRecoder:
             return self
 
         print("Save recording")
-        if not os.path.exists(self.__storage_directory):
-            os.makedirs(self.__storage_directory)
-        wav_output_filename = f'{self.__storage_directory}/{datetime.now()}.wav' # name of .wav file
-        # save the audio frames as .wav file
-        wavefile = wave.open(wav_output_filename,'wb')
-        wavefile.setnchannels(self.chans)
-        wavefile.setsampwidth(self.__audio.get_sample_size(self.form_1))
-        wavefile.setframerate(self.samp_rate)
-        wavefile.writeframes(b''.join(self.__frames))
-        wavefile.close()
+        try:
+            if not os.path.exists(self.__storage_directory):
+                os.makedirs(self.__storage_directory)
+            wav_output_filename = f'{self.__storage_directory}/{datetime.now()}.wav' # name of .wav file
+            # save the audio frames as .wav file
+            wavefile = wave.open(wav_output_filename,'wb')
+            wavefile.setnchannels(self.chans)
+            wavefile.setsampwidth(self.__audio.get_sample_size(self.form_1))
+            wavefile.setframerate(self.samp_rate)
+            wavefile.writeframes(b''.join(self.__frames))
+        except:
+            logging.exception('Got exception on main handler')
+        finally:
+            # Close Wave-File
+            wavefile.close()
         return self
 
     def close(self):

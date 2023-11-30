@@ -4,7 +4,7 @@ from core.InputOutputSelector import InputOutputSelector
 import threading
 import logging
 
-logging.basicConfig(filename="logging/ weddingbook.out",
+logging.basicConfig(filename="logging/weddingbook.out",
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
@@ -43,7 +43,7 @@ class WeddingBookMachine(StateMachine):
         try:
             self.recorder.record()
             if self.is_picked_up.is_set():
-               logging.debug("Play announcement -Aufgelegt.wav-")
+
                self.player.play("resources/announcement/Aufgelegt.wav")
                logging.debug("Play announcement -Tote_Leitung.wav-")
                self.player.play("resources/announcement/Tote_Leitung.wav")
