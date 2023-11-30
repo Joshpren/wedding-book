@@ -53,10 +53,27 @@ class WeddingBook:
 
 
 def setup_logging():
-    log_file = "logging/wedding-book.log"
-    if not os.path.exists("logging"):
-        os.makedirs("logging")
-    logging.basicConfig(filename='', level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
+    # Definiere den Dateipfad
+    file_path = "logging/weddingbook.log"
+
+    # Extrahiere das Verzeichnis aus dem Dateipfad
+    directory = os.path.dirname(file_path)
+
+    # Überprüfe, ob das Verzeichnis existiert, und erstelle es, wenn nicht
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Das Verzeichnis {directory} wurde erstellt.")
+
+    # Überprüfe, ob die Datei bereits existiert
+    if not os.path.exists(file_path):
+        # Wenn nicht, erstelle die Datei und öffne sie im Schreibmodus (w)
+        with open(file_path, 'w'):
+            # Füge optional eine Startnachricht hinzu
+            print(f"Die Datei {file_path} wurde erstellt.")
+    else:
+        print(f"Die Datei {file_path} existiert bereits.")
+        
+    logging.basicConfig(filename=file_path, level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
 
 try:
     setup_logging()
