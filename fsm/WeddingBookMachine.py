@@ -10,7 +10,7 @@ class WeddingBookMachine(StateMachine):
     is_picked_up = threading.Event()
     __dev_index = InputOutputSelector().load()
     logger = logging.getLogger('WeddingBookMachine')
-    recorder = AudioRecorder.AudioRecoder(__dev_index, is_picked_up)
+    recorder = AudioRecorder.AudioRecorder(__dev_index, is_picked_up)
     player = AudioPlayer.AudioPlayer(__dev_index, is_picked_up)
 
     idling = State("Idling", initial=True)

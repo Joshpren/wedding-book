@@ -5,7 +5,7 @@ import time
 import logging
 from datetime import datetime
 
-class AudioRecoder:
+class AudioRecorder:
 
     form_1 = pyaudio.paInt16 # 16-bit resolution
     chans = 1 # 1 channel
@@ -14,7 +14,7 @@ class AudioRecoder:
     max_audio_length = 300 # max seconds to record
 
     def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
-        self.logger = logging.getLogger('AudioRecoder')
+        self.logger = logging.getLogger('AudioRecorder')
         self.__storage_directory = storage_directory
         self.__audio = pyaudio.PyAudio()  # create pyaudio instantiation
         self.__dev_index = dev_index# device index found by p.get_device_info_by_index(ii)
@@ -48,12 +48,17 @@ class AudioRecoder:
             self.__duration = time.time() - start_time
         except Exception as e:
             self.logger.exception(e)
+            stream.stop_stream()
+            self.logger.debug("Stream stopped due to exception")
+            stream.close()
+            self.logger.debug("Stream closed due to exception")
         finally:
             # Recording has been stopped -> stop stream
-            stream.stop_stream()
-            self.logger.debug("Stream stopped")
-            stream.close()
-            self.logger.debug("Stream closed")
+            if stream:
+                stream.stop_stream()
+                self.logger.debug("Stream stopped")
+                stream.close()
+                self.logger.debug("Stream closed")
         return self
 
     def save(self):
@@ -77,8 +82,8 @@ class AudioRecoder:
             wavefile.setsampwidth(self.__audio.get_sample_size(self.form_1))
             wavefile.setframerate(self.samp_rate)
             wavefile.writeframes(b''.join(self.__frames))
-        except:
-            self.logger.critical(e)
+        except Exception as e:
+            self.logger.critical(f'Got exception on main handler: {e}')
         finally:
             # Close Wave-File
             wavefile.close()
