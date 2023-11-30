@@ -2,18 +2,13 @@ import wave
 import pyaudio
 import logging
 
-logging.basicConfig(filename="logging/weddingbook.out",
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
-
 class AudioPlayer:
 
     chunk = 1024
 
     def __init__(self, dev_index, is_picked_up):
         """ Init audio stream """
+        self.logger = logging.getLogger('AudioRecoder')
         self.__dev_index = dev_index
         self.__is_picked_up = is_picked_up
         self.__audio = pyaudio.PyAudio()
@@ -21,7 +16,7 @@ class AudioPlayer:
     def play(self, file):
         """ Play entire file """
         print("Play announcement")
-        logging.debug("Play announcement \"{file}\"")
+        self.logger.debug("Play announcement \"{file}\"")
         try:
             wf = wave.open(file, 'rb')
             data = wf.readframes(self.chunk)
@@ -36,9 +31,12 @@ class AudioPlayer:
                 stream.write(data)
                 data = wf.readframes(self.chunk)
         except:
-            logging.exception('Got exception on main handler')
+            self.logger.critical('Got exception on main handler')
         finally:
             stream.stop_stream()
+            self.logger.debug("Stream has been stopped!")
             stream.close()
+            self.logger.debug("Stream has been closed!")
             wf.close()
+            self.logger.debug("Wave-File has been closed!")
 

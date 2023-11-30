@@ -4,20 +4,12 @@ from core.InputOutputSelector import InputOutputSelector
 import threading
 import logging
 
-logging.basicConfig(filename="logging/weddingbook.out",
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
-
-logging.info("Running Urban Planning")
-
-logger = logging.getLogger('urbanGUI')
 
 class WeddingBookMachine(StateMachine):
 
     is_picked_up = threading.Event()
     __dev_index = InputOutputSelector().load()
+    logger = logging.getLogger('WeddingBookMachine')
     recorder = AudioRecorder.AudioRecoder(__dev_index, is_picked_up)
     player = AudioPlayer.AudioPlayer(__dev_index, is_picked_up)
 
@@ -35,7 +27,7 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
-        logging.debug("Play announcement -Ansage.wav-")
+        self.logger.debug("Play announcement -Ansage.wav-")
         self.player.play("resources/announcement/Ansage.wav")
 
     def on_record(self):
@@ -43,21 +35,20 @@ class WeddingBookMachine(StateMachine):
         try:
             self.recorder.record()
             if self.is_picked_up.is_set():
-
                self.player.play("resources/announcement/Aufgelegt.wav")
-               logging.debug("Play announcement -Tote_Leitung.wav-")
                self.player.play("resources/announcement/Tote_Leitung.wav")
         except:
-            logging.exception('Got exception on main handler')
+            self.logger.exception('Got exception on main handler')
 
 
     def on_save_recording(self):
         # Save Recording
-        logging.debug("Save Recording")
+        self.logger.debug("Save Recording")
         self.recorder.save().close()
 
 
     def on_pick_up(self):
+        self.logger.debug("Pick up!")
         self.is_picked_up.set()
         if not self.current_state == WeddingBookMachine.idling:
             return
@@ -68,7 +59,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_hang_up(self):
         print("Hang up")
-        logging.debug("Hang up")
+        self.logger.debug("Hang up")
         self.is_picked_up.clear()
         self.save_recording()
         self.complete()

@@ -2,6 +2,8 @@ from fsm import WeddingBookMachine
 import RPi.GPIO as GPIO
 import threading
 import time
+import logging
+
 
 class WeddingBook:
 
@@ -49,9 +51,11 @@ class WeddingBook:
 
 
 
-
+def setup_logging():
+    logging.basicConfig(filename='logging/wedding-book.log', level=logging.DEBUG, filemode='a', format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S',)
 
 try:
+    setup_logging()
     wb = WeddingBook()
     # run_by = input("Run by: \n [1] Keyboard Input \n [2] Circuit Input \n Enter 1 or 2.")
     # if run_by == '1':
