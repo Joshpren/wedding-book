@@ -1,4 +1,5 @@
 import os
+import re
 
 
 def clean_filename(filename):
@@ -8,6 +9,9 @@ def clean_filename(filename):
     # Durchlaufe die verbotenen Zeichen und ersetze sie im Dateinamen
     for char, replacement in forbidden_chars.items():
         filename = filename.replace(char, replacement)
+
+    # Entferne sechs Zahlen nach einem Punkt
+    filename = re.sub(r'\.\d{6}', '', filename)
 
     return filename
 
