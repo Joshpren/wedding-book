@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mikrofon Auswahl</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <style>
+      .dropdown {
+        position: relative;
+        display: inline-block;
+        width: 220px;
+      }
+
+      .dropdown-selected {
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .dropdown-selected i {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px; /* Reduziert den Abstand zwischen Icon und Text */
+      }
+
+      .dropdown-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .dropdown:hover .dropdown-options {
+        display: block;
+      }
+
+      .dropdown-options div {
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .dropdown-options div:hover {
+        background-color: #f0f0f0;
+      }
+
+      .dropdown-options .selected {
+        background-color: #e0e0e0;
+        font-weight: bold;
+      }
+    </style>
+    {% autoescape off %} {{ dropdown }} {% endautoescape %}
+    {% autoescape off %} {{ recordingTable }} {% endautoescape %}
+    <script>
+      function selectMic(optionId) {
+        // Entferne die ausgewählte Klasse von allen Optionen
+        document.querySelectorAll(".dropdown-options div").forEach((div) => {
+          div.classList.remove("selected")
+        })
+        option = document.getElementById(optionId)
+        // Markiere das geklickte Element als ausgewählt
+        option.classList.add("selected")
+
+        // Aktualisiere die Anzeige im Dropdown
+        document
+          .getElementById("selected-mic")
+          .querySelector("span").textContent = option.textContent
+
+        var xhr = new XMLHttpRequest();
+        var url = "/selectDevice/";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        var data = JSON.stringify({"id": optionId});
+        xhr.send(data);
+      }
+    </script>
+  </body>
+</html>
