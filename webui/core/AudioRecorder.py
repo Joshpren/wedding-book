@@ -4,6 +4,8 @@ import pyaudio
 import time
 import logging
 from datetime import datetime
+from webui.models import Entry
+from webserver.settings import MEDIA_ROOT
 
 class AudioRecorder:
 
@@ -13,7 +15,7 @@ class AudioRecorder:
     chunk = 4096
     max_audio_length = 300
 
-    def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
+    def __init__(self, dev_index, is_picked_up, storage_directory=MEDIA_ROOT):
         self.logger = logging.getLogger('AudioRecorder')
         self.__storage_directory = storage_directory
         self.__audio = pyaudio.PyAudio()
@@ -70,12 +72,18 @@ class AudioRecorder:
             wavefile.setsampwidth(self.__audio.get_sample_size(self.form_1))
             wavefile.setframerate(self.samp_rate)
             wavefile.writeframes(b''.join(self.__frames))
+            self.create_entry(wav_output_filename, self.__duration)
         except Exception as e:
             self.logger.critical(f'Got exception on main handler: {e}')
         finally:
             wavefile.close()
             self.logger.debug("Wavefile has been closed")
         return self
+
+    def create_entry(self, file, duration):
+        new_entry = Entry(audio_file=file, transcription="", seconds=duration)
+        new_entry.save()
+
 
     def close(self):
         self.__frames = []
