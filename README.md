@@ -1,2 +1,4 @@
 # wedding-book
-##This is a fucking test
+##This Activate Virtual Environment:
+Widnows: .venv\Scripts\activate.bat
+Linux: .venv/Scripts/activate
