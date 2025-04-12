@@ -1,3 +1,3 @@
 PyAudio==0.2.14
-python-statemachine==2.1.2
+python-statemachine==2.5.0
 Wave==0.0.2
