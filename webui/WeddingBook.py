@@ -1,5 +1,5 @@
 from webui.fsm import WeddingBookMachine
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import threading
 import time
 import os
