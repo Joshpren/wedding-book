@@ -58,7 +58,6 @@ class WeddingBookMachine(StateMachine):
 
 
     def on_hang_up(self):
-        print("Hang up")
         logger.debug("Hang up")
         self.is_picked_up.clear()
         self.save_recording()

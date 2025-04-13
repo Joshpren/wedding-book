@@ -13,7 +13,6 @@ class AudioPlayer:
         self.__audio = pyaudio.PyAudio()
 
     def play(self, file):
-        print("Play announcement")
         logger.debug(f"Play announcement \"{file}\"")
         try:
             wf = wave.open(file, 'rb')

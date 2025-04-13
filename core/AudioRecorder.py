@@ -26,7 +26,7 @@ class AudioRecorder:
     def record(self):
         if not self.__is_picked_up:
             return
-        print("recording")
+        logger.info("Recording")
         try:
             stream = self.__audio.open(
                 format=self.form_1, rate=self.samp_rate, channels=self.chans,
@@ -36,7 +36,6 @@ class AudioRecorder:
             start_time = time.time()
             while self.__is_picked_up.is_set():
                 if int(time.time() - start_time) >= self.max_audio_length:
-                    print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
                     logger.info(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
                     self.__duration = time.time() - start_time
                     break
@@ -55,11 +54,8 @@ class AudioRecorder:
 
     def save(self):
         if not self.__frames or self.__duration < 5:
-            print("Recording is too short to be saved! It has to be at least 5 seconds")
             logger.debug("Recording is too short to be saved! It has to be at least 5 seconds")
             return self
-
-        print("Save recording")
         logger.debug("Save recording")
         try:
             if not os.path.exists(self.__storage_directory):

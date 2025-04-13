@@ -58,8 +58,8 @@ class WeddingBook:
     def gpio_setup(self, gpio_device=None):
         logger.debug("Set pin-mode to GPIO.BCM.")
         self.gpio_device = Button(pin=self.pin_number, pin_factory=gpio_device)
-        self.gpio_device.when_held = self.pick_up()
-        self.gpio_device.when_released = print("Hallo")
+        self.gpio_device.when_pressed = self.pick_up
+        self.gpio_device.when_released = self.hang_up
 
     def gpio_cleanup(self):
         logger.debug("Clean up GPIO.")

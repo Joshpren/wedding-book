@@ -7,7 +7,7 @@ from time import sleep
 
 class MyTestCase(unittest.TestCase):
 
-    def test_something(self):
+    def test_recording(self):
         Device.pin_factory  = MockFactory()
         gpio_pin = Device.pin_factory.pin(17)
         wedding_book = WeddingBook()
@@ -15,16 +15,19 @@ class MyTestCase(unittest.TestCase):
 
         gpio_device = wedding_book.gpio_device
         
-        gpio_pin.drive_low()
+        # Initial state
+        self.assertEqual(False, gpio_device.is_active)
         sleep(2)
+        # Pick up
+        print("Pick up")
+        gpio_pin.drive_low()
+        self.assertEqual(True, gpio_device.is_active)
+        sleep(2)
+        # Hang up
+        print("Hang up")
         gpio_pin.drive_high()
-        sleep(4)
-        print(gpio_device.is_active)
+        self.assertEqual(False, gpio_device.is_active)
         
-
-
-        self.assertEqual(True, True)  # add assertion here
-
 
 if __name__ == '__main__':
     unittest.main()
