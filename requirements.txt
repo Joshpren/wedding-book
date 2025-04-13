@@ -1,3 +1,6 @@
+colorzero==2.0
+gpiozero==2.0.1
 PyAudio==0.2.14
 python-statemachine==2.5.0
+setuptools==78.1.0
 Wave==0.0.2
