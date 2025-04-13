@@ -1,6 +1,5 @@
 from fsm import WeddingBookMachine
-# import RPi.GPIO as GPIO
-from gpiozero import Pin
+from gpiozero import GPIODevice
 import threading
 import time
 import logging
@@ -10,6 +9,7 @@ logger = logging.getLogger(__name__)
 class WeddingBook:
 
     pin_number = 17
+    gpio_device = None
 
     def __init__(self):
         logger.debug(f"Starting with pin-number: {self.pin_number}")
@@ -29,13 +29,13 @@ class WeddingBook:
         wbm = WeddingBookMachine.WeddingBookMachine()
         is_picked_up = False
         while True:
-            if GPIO.input(self.pin_number) == GPIO.LOW and not is_picked_up:
+            if self.gpio_device.value == 0 and not is_picked_up:
                 # Circuit is closed, phone has been picked up
                 is_picked_up = True
                 time.sleep(1)
                 wbm_thread = threading.Thread(target=wbm.on_pick_up, args=())
                 wbm_thread.start()
-            elif not GPIO.input(self.pin_number) == GPIO.LOW and is_picked_up:
+            elif self.gpio_device.value == 1 and is_picked_up:
                 # Circuit is interrupted
                 wbm.on_hang_up()
                 wbm_thread.join()
@@ -45,14 +45,11 @@ class WeddingBook:
                 time.sleep(0.5)
 
 
-    def gpio_setup(self):
+    def gpio_setup(self, gpio_device=GPIODevice(pin_factory=None)):
         logger.debug("Set pin-mode to GPIO.BCM.")
-        # Setze den Pin-Modus auf GPIO.BCM
-        # GPIO.setmode(GPIO.BCM)
-
-        # # Setze den Pin als Eingang
-        # GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        self.gpio_device.pin = self.pin_number
+        self.gpio_device = gpio_device
 
     def gpio_cleanup(self):
         logger.debug("Clean up GPIO.")
-            # GPIO.cleanup()
+        self.gpio_device.close()
