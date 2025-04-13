@@ -3,13 +3,13 @@ from core import AudioPlayer, AudioRecorder
 from core.InputOutputSelector import InputOutputSelector
 import threading
 import logging
-
+logger = logging.getLogger(__name__)
 
 class WeddingBookMachine(StateMachine):
 
     is_picked_up = threading.Event()
     __dev_index = InputOutputSelector().load()
-    logger = logging.getLogger('WeddingBookMachine')
+    
     recorder = AudioRecorder.AudioRecorder(__dev_index, is_picked_up)
     player = AudioPlayer.AudioPlayer(__dev_index, is_picked_up)
 
@@ -27,7 +27,7 @@ class WeddingBookMachine(StateMachine):
 
     def before_record(self):
         # Play announcement
-        self.logger.debug("Play announcement -Ansage.wav-")
+        logger.debug("Play announcement -Ansage.wav-")
         self.player.play("resources/announcement/Ansage.wav")
 
     def on_record(self):
@@ -38,17 +38,17 @@ class WeddingBookMachine(StateMachine):
                self.player.play("resources/announcement/Aufgelegt.wav")
                self.player.play("resources/announcement/Tote_Leitung.wav")
         except:
-            self.logger.exception('Got exception on main handler')
+            logger.exception('Got exception on main handler')
 
 
     def on_save_recording(self):
         # Save Recording
-        self.logger.debug("Save Recording")
+        logger.debug("Save Recording")
         self.recorder.save().close()
 
 
     def on_pick_up(self):
-        self.logger.debug("Pick up!")
+        logger.debug("Pick up!")
         self.is_picked_up.set()
         if not self.current_state == WeddingBookMachine.idling:
             return
@@ -59,7 +59,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_hang_up(self):
         print("Hang up")
-        self.logger.debug("Hang up")
+        logger.debug("Hang up")
         self.is_picked_up.clear()
         self.save_recording()
         self.complete()

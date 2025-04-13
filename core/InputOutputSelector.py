@@ -1,6 +1,8 @@
 import pyaudio
 import json
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 class InputOutputSelector:
 
@@ -32,6 +34,10 @@ class InputOutputSelector:
             outfile.write(json_object)
 
     def load(self):
-        with open(f'{self.config_path}/config.json', 'r') as openfile:
-            json_object = json.load(openfile)
+        try:
+            with open(f'{self.config_path}/config.json', 'r') as openfile:
+                json_object = json.load(openfile)
+        except FileNotFoundError:
+            logger.critical("No Config has been found")
+            return None
         return int(json_object["dev_index"])

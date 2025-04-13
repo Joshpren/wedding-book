@@ -1,20 +1,20 @@
 import wave
 import pyaudio
 import logging
+logger = logging.getLogger(__name__)
 
 class AudioPlayer:
 
     chunk = 1024
 
     def __init__(self, dev_index, is_picked_up):
-        self.logger = logging.getLogger('AudioPlayer')
         self.__dev_index = dev_index
         self.__is_picked_up = is_picked_up
         self.__audio = pyaudio.PyAudio()
 
     def play(self, file):
         print("Play announcement")
-        self.logger.debug(f"Play announcement \"{file}\"")
+        logger.debug(f"Play announcement \"{file}\"")
         try:
             wf = wave.open(file, 'rb')
             stream = self.__audio.open(
@@ -29,12 +29,12 @@ class AudioPlayer:
                 stream.write(data)
                 data = wf.readframes(self.chunk)
         except Exception as e:
-            self.logger.critical(f'Got exception on main handler: {e}')
+            logger.critical(f'Got exception on main handler: {e}')
         finally:
             if 'stream' in locals():
                 stream.stop_stream()
-                self.logger.debug("Stream has been stopped!")
+                logger.debug("Stream has been stopped!")
                 stream.close()
-                self.logger.debug("Stream has been closed!")
+                logger.debug("Stream has been closed!")
             wf.close()
-            self.logger.debug("Wave-File has been closed!")
+            logger.debug("Wave-File has been closed!")

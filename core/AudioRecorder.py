@@ -2,8 +2,9 @@ import os
 import wave
 import pyaudio
 import time
-import logging
 from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
 
 class AudioRecorder:
 
@@ -14,7 +15,7 @@ class AudioRecorder:
     max_audio_length = 300
 
     def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
-        self.logger = logging.getLogger('AudioRecorder')
+        
         self.__storage_directory = storage_directory
         self.__audio = pyaudio.PyAudio()
         self.__dev_index = dev_index
@@ -36,47 +37,47 @@ class AudioRecorder:
             while self.__is_picked_up.is_set():
                 if int(time.time() - start_time) >= self.max_audio_length:
                     print(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
-                    self.logger.info(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
+                    logger.info(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
                     self.__duration = time.time() - start_time
                     break
                 data = stream.read(self.chunk)
                 self.__frames.append(data)
             self.__duration = time.time() - start_time
         except Exception as e:
-            self.logger.exception(f'Got exception on main handler: {e}')
+            logger.exception(f'Got exception on main handler: {e}')
         finally:
             if 'stream' in locals():
                 stream.stop_stream()
-                self.logger.debug("Stream stopped")
+                logger.debug("Stream stopped")
                 stream.close()
-                self.logger.debug("Stream closed")
+                logger.debug("Stream closed")
         return self
 
     def save(self):
         if not self.__frames or self.__duration < 5:
             print("Recording is too short to be saved! It has to be at least 5 seconds")
-            self.logger.debug("Recording is too short to be saved! It has to be at least 5 seconds")
+            logger.debug("Recording is too short to be saved! It has to be at least 5 seconds")
             return self
 
         print("Save recording")
-        self.logger.debug("Save recording")
+        logger.debug("Save recording")
         try:
             if not os.path.exists(self.__storage_directory):
                 os.makedirs(self.__storage_directory)
-                self.logger.debug(f"No directory has been found for {self.__storage_directory} and therefore has been created!")
-            wav_output_filename = f'{self.__storage_directory}/{datetime.now()}.wav'
+                logger.debug(f"No directory has been found for {self.__storage_directory} and therefore has been created!")
+            wav_output_filename = f'{self.__storage_directory}/{datetime.now().strftime("%Y%m%d-%H%M%S")}.wav'
             wavefile = wave.open(wav_output_filename, 'wb')
             wavefile.setnchannels(self.chans)
             wavefile.setsampwidth(self.__audio.get_sample_size(self.form_1))
             wavefile.setframerate(self.samp_rate)
             wavefile.writeframes(b''.join(self.__frames))
         except Exception as e:
-            self.logger.critical(f'Got exception on main handler: {e}')
+            logger.critical(f'Got exception on main handler: {e}')
         finally:
             wavefile.close()
-            self.logger.debug("Wavefile has been closed")
+            logger.debug("Wavefile has been closed")
         return self
 
     def close(self):
         self.__frames = []
-        self.logger.debug(f"Reset Frames {self.__frames}")
+        logger.debug(f"Reset Frames {self.__frames}")
