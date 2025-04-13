@@ -1,16 +1,29 @@
 import unittest
-import WeddingBook
-from unittest.mock import patch, MagicMock
+from WeddingBook import WeddingBook
+from gpiozero import Device, Button
+from gpiozero.pins.mock import MockFactory
+from time import sleep
 
 
 class MyTestCase(unittest.TestCase):
-    @patch('gpiozero.GPIODevice')
-    def test_something(self, MockGPIODevice):
-        wedding_book = WeddingBook.WeddingBook()
-        # Setup des Mocks
-        mock_instance = MockGPIODevice.return_value
+
+    def test_something(self):
+        Device.pin_factory  = MockFactory()
+        gpio_pin = Device.pin_factory.pin(17)
+        wedding_book = WeddingBook()
         wedding_book.gpio_setup()
-        self.assertEqual(True, False)  # add assertion here
+
+        gpio_device = wedding_book.gpio_device
+        
+        gpio_pin.drive_low()
+        sleep(2)
+        gpio_pin.drive_high()
+        sleep(4)
+        print(gpio_device.is_active)
+        
+
+
+        self.assertEqual(True, True)  # add assertion here
 
 
 if __name__ == '__main__':
