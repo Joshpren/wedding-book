@@ -49,7 +49,7 @@ try:
 
 
 except KeyboardInterrupt:
-    logger.info("Has been stopped by user!")
+    logger.info("Has been stopped by KeyboardInterrupt.")
 except Exception as e:    
     logger.exception('Got exception on main handler')
-    # GPIO.cleanup()
+wb.gpio_cleanup()

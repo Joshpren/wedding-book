@@ -13,13 +13,7 @@ class WeddingBook:
 
     def __init__(self):
         logger.debug(f"Starting with pin-number: {self.pin_number}")
-        # Setze den Pin-Modus auf GPIO.BCM
-        # GPIO.setmode(GPIO.BCM)
-
-        # # Setze den Pin als Eingang
-        # GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-
+        
     def run_by_keyboard_input(self):
         logger.debug("Run by keyboard input.")
         wbm = WeddingBookMachine.WeddingBookMachine()
@@ -49,3 +43,16 @@ class WeddingBook:
             else:
                 # Do nothing
                 time.sleep(0.5)
+
+
+    def gpio_setup(self):
+        logger.debug("Set pin-mode to GPIO.BCM.")
+        # Setze den Pin-Modus auf GPIO.BCM
+        # GPIO.setmode(GPIO.BCM)
+
+        # # Setze den Pin als Eingang
+        # GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def gpio_cleanup(self):
+        logger.debug("Clean up GPIO.")
+            # GPIO.cleanup()
