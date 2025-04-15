@@ -15,14 +15,9 @@ class WeddingBookMachine(StateMachine):
 
     idling = State("Idling", initial=True)
     recording = State("Recording")
-    saving = State("Saving")
-    canceling = State("Canceling")
 
-    idle = idling.to.itself()
+    idle = recording.to(idling)
     record = idling.to(recording)
-    cancel = canceling.from_(recording, idling)
-    save_recording = recording.to(saving)
-    complete = saving.to(idling)
 
 
     def before_record(self):
@@ -40,9 +35,9 @@ class WeddingBookMachine(StateMachine):
         except:
             logger.exception('Got exception on main handler')
 
-
-    def on_save_recording(self):
-        # Save Recording
+    
+    def after_record(self):
+        print("Save Recording")
         logger.debug("Save Recording")
         self.recorder.save().close()
 
@@ -55,11 +50,8 @@ class WeddingBookMachine(StateMachine):
 
         self.record()
 
-
-
     def on_hang_up(self):
         logger.debug("Hang up")
         self.is_picked_up.clear()
-        self.save_recording()
-        self.complete()
+        self.idle()
 
