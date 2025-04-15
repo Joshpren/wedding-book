@@ -39,6 +39,8 @@ def setup_logging():
 try:
     setup_logging()
     wb = WeddingBook()
+    
+    # wb.gpio_setup()
     # run_by = input("Run by: \n [1] Keyboard Input \n [2] Circuit Input \n Enter 1 or 2.")
     # if run_by == '1':
     wb.run_by_keyboard_input()
@@ -52,4 +54,4 @@ except KeyboardInterrupt:
     logger.info("Has been stopped by KeyboardInterrupt.")
 except Exception as e:    
     logger.exception('Got exception on main handler')
-wb.gpio_cleanup()
+# wb.gpio_cleanup()

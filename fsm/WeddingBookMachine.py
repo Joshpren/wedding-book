@@ -37,7 +37,6 @@ class WeddingBookMachine(StateMachine):
 
     
     def after_record(self):
-        print("Save Recording")
         logger.debug("Save Recording")
         self.recorder.save().close()
 

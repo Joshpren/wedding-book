@@ -32,8 +32,8 @@ class AudioPlayer:
         finally:
             if 'stream' in locals():
                 stream.stop_stream()
-                logger.debug("Stream has been stopped!")
+                logger.debug(f"Stream of \"{file}\" has been stopped!")
                 stream.close()
-                logger.debug("Stream has been closed!")
+                logger.debug(f"Stream of \"{file}\" has been closed!")
             wf.close()
             logger.debug("Wave-File has been closed!")
