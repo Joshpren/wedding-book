@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def setup_logging():
     # Definiere den Dateipfad
-    file_path = "logging/weddingbook.log"
+    file_path = "var/log/weddingbook.log"
 
     # Extrahiere das Verzeichnis aus dem Dateipfad
     log_directory = os.path.dirname(file_path)
@@ -40,14 +40,9 @@ try:
     setup_logging()
     wb = WeddingBook()
     
-    # wb.gpio_setup()
-    # run_by = input("Run by: \n [1] Keyboard Input \n [2] Circuit Input \n Enter 1 or 2.")
-    # if run_by == '1':
-    wb.run_by_keyboard_input()
-    # elif run_by == '2':
-    # wb.run_by_circuit_input()
-    # else:
-    #     print("No valid input. Program has been stopped!")
+    wb.gpio_setup()
+    wb.run_by_circuit_input()
+
 
 
 except KeyboardInterrupt:

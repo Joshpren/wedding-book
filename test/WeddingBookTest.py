@@ -1,6 +1,6 @@
 import unittest
 from WeddingBook import WeddingBook
-from gpiozero import Device, Button
+from gpiozero import Device
 from gpiozero.pins.mock import MockFactory
 from time import sleep
 
