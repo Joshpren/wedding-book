@@ -34,6 +34,7 @@ def setup_logging():
                     ## ##  ###### #####  #####  # #    #  ####  ######   ####   ####  #    # is starting!                                                                       
                     """
     logger.info(log_init)
+    logger.info(f"Project-Directory: {os.path.dirname(os.path.realpath(__file__))}")
 
 
 try:
