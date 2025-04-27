@@ -1,4 +1,5 @@
 import os
+import platform
 import logging
 from WeddingBook import WeddingBook
 
@@ -8,7 +9,11 @@ logger = logging.getLogger(__name__)
 
 def setup_logging():
     # Definiere den Dateipfad
-    file_path = "var/log/weddingbook.log"
+    system_os = platform.system()
+    if system_os == "Windows":
+        file_path = "var/log/weddingbook.log"
+    else:
+        file_path = "/var/log/weddingbook.log"
 
     # Extrahiere das Verzeichnis aus dem Dateipfad
     log_directory = os.path.dirname(file_path)

@@ -1,3 +1,3 @@
-from core.InputOutputSelector import InputOutputSelector
+from audio.InputOutputSelector import InputOutputSelector
 
 InputOutputSelector().select_device().save()

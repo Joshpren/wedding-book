@@ -1,6 +1,6 @@
 from statemachine import StateMachine, State
-from core import AudioPlayer, AudioRecorder
-from core.InputOutputSelector import InputOutputSelector
+from audio import AudioPlayer, AudioRecorder
+from audio.InputOutputSelector import InputOutputSelector
 import threading
 import logging
 logger = logging.getLogger(__name__)
