@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 class InputOutputSelector:
 
-    config_path = 'resources/config'
+    config_path = 'config'
 
     def __init__(self):
         self.__prefered_device = None
@@ -21,23 +21,18 @@ class InputOutputSelector:
         return self
 
     def save(self):
-        dictionary = {
-            "dev_index": self.__prefered_device
-        }
+        config = self.load()
+        config["device_index"] = self.__prefered_device
+
         if not os.path.exists(self.config_path):
             os.makedirs(self.config_path)
         # Serializing json
-        json_object = json.dumps(dictionary, indent=1)
+        json_object = json.dumps(config, indent=1)
 
         # Writing to sample.json
         with open(f'{self.config_path}/config.json', 'w') as outfile:
             outfile.write(json_object)
 
     def load(self):
-        try:
-            with open(f'{self.config_path}/config.json', 'r') as openfile:
-                json_object = json.load(openfile)
-        except FileNotFoundError:
-            logger.critical("No Config has been found")
-            return None
-        return int(json_object["dev_index"])
+        with open(f'{self.config_path}/config.json', 'r') as openfile:
+                return json.load(openfile)

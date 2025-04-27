@@ -50,7 +50,7 @@ def setup_logging():
 try:
     setup_logging()
     config = load_config()
-    wb = WeddingBook()
+    wb = WeddingBook(config)
     
     wb.gpio_setup()
     wb.run_by_circuit_input()

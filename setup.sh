@@ -9,7 +9,8 @@ After=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=/home/joshua/wedding-book/
-ExecStart=sudo python /home/joshua/wedding-book/main.py
+ExecStart=python /home/joshua/wedding-book/main.py
+Environment=PYTHONPATH=/home/joshua/wedding-book/src/
 KillSignal=SIGINT
 Restart=on-failure
 
