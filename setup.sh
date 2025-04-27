@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Erstelle die weddingbook.service Datei
-sudo bash -c 'cat > /lib/systemd/system/weddingbook.service <<EOF
+# Erstelle die wedding-book.service Datei
+sudo bash -c 'cat > /lib/systemd/system/wedding-book.service <<EOF
 [Unit]
-Description=Wedding Book Service
+Description=Wedding-Book Service
 After=multi-user.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/joshua/weddingbook/
-ExecStart=sudo python /home/joshua/weddingbook/main.py
+WorkingDirectory=/home/joshua/wedding-book/
+ExecStart=sudo python /home/joshua/wedding-book/main.py
 KillSignal=SIGINT
 Restart=on-failure
 
@@ -18,13 +18,13 @@ WantedBy=multi-user.target
 EOF'
 
 # Systemd neu laden
-sudo systemctl daemon-reload
+systemctl daemon-reload
 
 # Service aktivieren
-sudo systemctl enable weddingbook.service
+systemctl enable wedding-book.service
 
 # Service starten
-sudo systemctl start weddingbook.service
+systemctl start wedding-book.service
 
 # Status anzeigen
-sudo systemctl status weddingbook.service
+systemctl status wedding-book.service

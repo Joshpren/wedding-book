@@ -1,19 +1,24 @@
 import os
 import platform
 import logging
+import json
 from WeddingBook import WeddingBook
 
 logger = logging.getLogger(__name__)
 
+
+def load_config():
+    with open('config/config.json', 'r') as openfile:
+        return json.load(openfile)
 
 
 def setup_logging():
     # Definiere den Dateipfad
     system_os = platform.system()
     if system_os == "Windows":
-        file_path = "var/log/weddingbook.log"
+        file_path = "var/log/wedding-book.log"
     else:
-        file_path = "/var/log/weddingbook.log"
+        file_path = "/var/log/wedding-book.log"
 
     # Extrahiere das Verzeichnis aus dem Dateipfad
     log_directory = os.path.dirname(file_path)
@@ -44,6 +49,7 @@ def setup_logging():
 
 try:
     setup_logging()
+    config = load_config()
     wb = WeddingBook()
     
     wb.gpio_setup()

@@ -10,7 +10,8 @@ class MyTestCase(unittest.TestCase):
     def test_recording(self):
         Device.pin_factory  = MockFactory()
         gpio_pin = Device.pin_factory.pin(17)
-        wedding_book = WeddingBook()
+        config = { "gpio_index":17, "device_index": 1 }
+        wedding_book = WeddingBook(config)
         wedding_book.gpio_setup()
 
         gpio_device = wedding_book.gpio_device
