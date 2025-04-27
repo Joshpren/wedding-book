@@ -27,8 +27,8 @@ class AudioPlayer:
             while data != b'' and self.__is_picked_up.is_set():
                 stream.write(data)
                 data = wf.readframes(self.chunk)
-        except Exception as e:
-            logger.critical(f'Got exception on main handler: {e}')
+        except:
+            logger.exception('Got exception on main handler')
         finally:
             if 'stream' in locals():
                 stream.stop_stream()
