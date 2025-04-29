@@ -43,12 +43,12 @@ class WeddingBookMachine(StateMachine):
 
 
     def on_pick_up(self):
-        logger.debug("Pick up!")
+        logger.debug(f"Current State: {self.current_state} - on pick up")
         self.is_picked_up.set()
         self.record()
 
     def on_hang_up(self):
-        logger.debug("Hang up")
+        logger.debug(f"Current State: {self.current_state} - on hang up")
         self.is_picked_up.clear()
         self.idle()
 
