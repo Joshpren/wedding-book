@@ -10,10 +10,12 @@ class WeddingBookMachine(StateMachine):
     is_picked_up = threading.Event()
 
     idling = State("Idling", initial=True)
+    playing = State("Playing")
     recording = State("Recording")
 
-    idle = recording.to(idling)
-    record = idling.to(recording)
+    idle = idling.from_(playing, recording)
+    play = idling.to(playing)
+    record = playing.to(recording)
 
     def __init__(self, config, model = None, state_field = "state", start_value = None, rtc = True, allow_event_without_transition = False, listeners = None):
         super().__init__(model, state_field, start_value, rtc, allow_event_without_transition, listeners)
@@ -22,10 +24,15 @@ class WeddingBookMachine(StateMachine):
         self.player = AudioPlayer.AudioPlayer(device_index, self.is_picked_up)
 
 
-    def before_record(self):
+    def on_enter_playing(self):
         # Play announcement
         logger.debug("Play announcement -Ansage.wav-")
         self.player.play("resources/announcement/Ansage.wav")
+
+    def after_play(self):
+        if self.is_picked_up.is_set():
+            self.record()
+
 
     def on_enter_recording(self):
         # Record guest-book entry
@@ -48,10 +55,10 @@ class WeddingBookMachine(StateMachine):
             return
         logger.debug(f"Current State: {self.current_state} - on pick up")
         self.is_picked_up.set()
-        self.record()
+        self.greet()
 
     def on_hang_up(self):
-        if(self.current_state != self.recording):
+        if(self.current_state == self.idling):
             logger.info(f"on hang-up: {self.current_state}")
             return
         logger.debug(f"Current State: {self.current_state} - on hang up")
