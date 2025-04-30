@@ -44,6 +44,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_pick_up(self):
         if(self.current_state.id != self.idling):
+            logger.info("self.current_state.id != self.idling=" + self.current_state.id != self.idling)
             return
         logger.debug(f"Current State: {self.current_state} - on pick up")
         self.is_picked_up.set()
@@ -51,6 +52,7 @@ class WeddingBookMachine(StateMachine):
 
     def on_hang_up(self):
         if(self.current_state.id != self.recording):
+            logger.info("self.current_state.id != self.recording=" + self.current_state.id != self.recording)
             return
         logger.debug(f"Current State: {self.current_state} - on hang up")
         self.is_picked_up.clear()
