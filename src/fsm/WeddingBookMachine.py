@@ -55,7 +55,7 @@ class WeddingBookMachine(StateMachine):
             return
         logger.debug(f"Current State: {self.current_state} - on pick up")
         self.is_picked_up.set()
-        self.greet()
+        self.play()
 
     def on_hang_up(self):
         if(self.current_state == self.idling):
