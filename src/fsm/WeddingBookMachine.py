@@ -27,7 +27,7 @@ class WeddingBookMachine(StateMachine):
         logger.debug("Play announcement -Ansage.wav-")
         self.player.play("resources/announcement/Ansage.wav")
 
-    def on_record(self):
+    def on_enter_recording(self):
         # Record guest-book entry
         try:
             self.recorder.record()
@@ -43,11 +43,15 @@ class WeddingBookMachine(StateMachine):
 
 
     def on_pick_up(self):
+        if(self.current_state.id != self.idling):
+            return
         logger.debug(f"Current State: {self.current_state} - on pick up")
         self.is_picked_up.set()
         self.record()
 
     def on_hang_up(self):
+        if(self.current_state.id != self.recording):
+            return
         logger.debug(f"Current State: {self.current_state} - on hang up")
         self.is_picked_up.clear()
         self.idle()
