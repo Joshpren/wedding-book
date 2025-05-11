@@ -1,2 +1,4 @@
 # wedding-book
-##This is a fucking test
+sudo -i
+systemctl start ssh
+passwd joshua start123
