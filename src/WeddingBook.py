@@ -23,11 +23,12 @@ class WeddingBook:
             time.sleep(0.5)
 
     def pick_up(self):
+        logger.info("The phone has been picked up! Recording-Thread will be started!")
         self.wbm_thread = threading.Thread(target=self.wbm.on_pick_up, args=())
         self.wbm_thread.start()
 
     def hang_up(self):
-        logger.info("Important Hang up")
+        logger.info("The phone has been hang up! Recording-Thread will be stopped!")
         self.wbm.on_hang_up()
         self.wbm_thread.join()
         
