@@ -27,6 +27,7 @@ class WeddingBook:
         self.wbm_thread.start()
 
     def hang_up(self):
+        logger.info("Important Hang up")
         self.wbm.on_hang_up()
         self.wbm_thread.join()
         
