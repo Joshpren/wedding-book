@@ -21,7 +21,7 @@ class WeddingBookMachine(StateMachine):
         super().__init__(model, state_field, start_value, rtc, allow_event_without_transition, listeners)
         device_index = int(config["device_index"])
         max_recording_duration_in_sec = int(config["max_recording_duration_in_sec"])
-        self.recorder = AudioRecorder.AudioRecorder(device_index, self.is_picked_up)
+        self.recorder = AudioRecorder.AudioRecorder(device_index, max_recording_duration_in_sec, self.is_picked_up)
         self.player = AudioPlayer.AudioPlayer(device_index, self.is_picked_up)
 
 
