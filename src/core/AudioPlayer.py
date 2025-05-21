@@ -19,7 +19,7 @@ class AudioPlayer:
             stream = self.__audio.open(
                 format=self.__audio.get_format_from_width(wf.getsampwidth()),
                 channels=wf.getnchannels(),
-                input_device_index=self.__dev_index,
+                output_device_index=self.__dev_index,
                 rate=wf.getframerate(),
                 output=True
             )

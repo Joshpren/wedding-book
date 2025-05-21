@@ -12,9 +12,8 @@ class AudioRecorder:
     chans = 1
     samp_rate = 44100
     chunk = 4096
-    max_audio_length = 300
 
-    def __init__(self, dev_index, is_picked_up, storage_directory='resources/target'):
+    def __init__(self, dev_index, max_recording_duration_in_sec, is_picked_up, storage_directory='resources/target'):
         
         self.__storage_directory = storage_directory
         self.__audio = pyaudio.PyAudio()
@@ -22,6 +21,7 @@ class AudioRecorder:
         self.__frames = []
         self.__duration = 0
         self.__is_picked_up = is_picked_up
+        self.__max_recording_duration_in_sec = max_recording_duration_in_sec
 
     def record(self):
         if not self.__is_picked_up:
@@ -35,8 +35,8 @@ class AudioRecorder:
             )
             start_time = time.time()
             while self.__is_picked_up.is_set():
-                if int(time.time() - start_time) >= self.max_audio_length:
-                    logger.info(f"Recording has been stopped after exceeding the maximum length of {self.max_audio_length} seconds!")
+                if int(time.time() - start_time) >= self.__max_recording_duration_in_sec:
+                    logger.info(f"Recording has been stopped after exceeding the maximum length of {self.__max_recording_duration_in_sec} seconds!")
                     self.__duration = time.time() - start_time
                     break
                 data = stream.read(self.chunk)
