@@ -19,10 +19,12 @@ class WeddingBookMachine(StateMachine):
 
     def __init__(self, config, model = None, state_field = "state", start_value = None, rtc = True, allow_event_without_transition = False, listeners = None):
         super().__init__(model, state_field, start_value, rtc, allow_event_without_transition, listeners)
-        device_index = int(config["device_index"])
+        input_device_index = config["input_device_index"]
+        output_device_index = config.get("output_device_index", None)
+       
         max_recording_duration_in_sec = int(config["max_recording_duration_in_sec"])
-        self.recorder = AudioRecorder.AudioRecorder(device_index, max_recording_duration_in_sec, self.is_picked_up)
-        self.player = AudioPlayer.AudioPlayer(device_index, self.is_picked_up)
+        self.recorder = AudioRecorder.AudioRecorder(input_device_index, max_recording_duration_in_sec, self.is_picked_up)
+        self.player = AudioPlayer.AudioPlayer(output_device_index, self.is_picked_up)
 
 
     def on_enter_playing(self):

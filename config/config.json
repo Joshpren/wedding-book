@@ -1,5 +1,6 @@
 {
     "gpio_index":17,
-    "device_index": 1,
+    "input_device_index": 1,
+    "output_device_index": 1,
     "max_recording_duration_in_sec": 600
 }

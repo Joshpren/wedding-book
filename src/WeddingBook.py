@@ -38,6 +38,8 @@ class WeddingBook:
         self.gpio_device = Button(pin=self.pin_number, pin_factory=gpio_device)
         self.gpio_device.when_pressed = self.pick_up
         self.gpio_device.when_released = self.hang_up
+        if self.gpio_device.is_active:
+            self.pick_up()
 
     def gpio_cleanup(self):
         logger.debug("Clean up GPIO.")
