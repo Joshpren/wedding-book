@@ -3,7 +3,7 @@ import platform
 import logging
 import json
 from signal import pause
-from fsm.weddingbookmachine import WeddingBook
+from fsm.WeddingBookMachine import WeddingBook
 
 logger = logging.getLogger(__name__)
 
