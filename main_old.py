@@ -3,7 +3,7 @@ import platform
 import logging
 import json
 from signal import pause
-from fsm.weddingbookmachinetwo import WeddingBook
+from WeddingBook import WeddingBook
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ def setup_logging():
     logger.info(log_init)
     logger.info(f"Project-Directory: {os.path.dirname(os.path.realpath(__file__))}")
 
-wb = None
+
 try:
     setup_logging()
     config = load_config()
@@ -61,5 +61,4 @@ except KeyboardInterrupt:
     logger.info("Has been stopped by KeyboardInterrupt.")
 except Exception as e:    
     logger.exception('Got exception on main handler')
-if wb:
-    wb.gpio_cleanup()
+wb.gpio_cleanup()
